@@ -10,10 +10,12 @@ https://projecteuler.net/archives
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <math.h>
 
 char* factorial(int);
 char* bigNumberMultiplier(char* number, int multiplier);
 const char* bigNumberAdd(char* number, int addend);
+int getdigit(int number, int digit);
 
 int main() {
 	std::string inputString = ""; //String so it can be dynamically sized
@@ -21,7 +23,7 @@ int main() {
 
 	std::cout << "Starting number: ";
 	std::cin >> inputString;
-	std::cout << " , Number to be added: ";
+	std::cout << "Number to be added: ";
 	std::cin >> addend;
 
 	if (!inputString.empty())
@@ -29,7 +31,7 @@ int main() {
 		//convert to cstring and send off to bigNumberAdd()
 		char* inputCString = new char[inputString.length() + 1];
 		strcpy_s(inputCString, inputString.length() + 1, inputString.c_str());
-		std::cout << atoi(bigNumberAdd(inputCString, addend));
+		std::cout << "Return: " << bigNumberAdd(inputCString, addend);
 	}
 
 }
@@ -74,15 +76,30 @@ const char* bigNumberAdd(char* number, int addend)
 	}
 
 	//number to in the next place if adding numbers are greater than 10 and need to be added to the next place value
+	//variables after checking if anything is wrong
 	int tempLeftNumber = 0;
+
 	//add right most number together
-
-
-	for (int i = strlen(number); i > int(strlen(number)); i--)
+	for (int i = strlen(number) - 1; i >= 0; i--)
 	{
-		//add right most place and then go right
-		std::cout << number[i] << "+" << addend << std::endl;
-	}
+		int sum = 0;
+		const char* numberConst = number[i];
 
+		tempLeftNumber = 0;
+		//add right most place and then go right
+		std::cout << number[i] << "+" << addend << "=" << atoi(numberConst) << std::endl;
+		//add together the place value and addend
+			//check if tempLeftNumber has remainder to be added
+		//if sum > 9 then put the remainder into tempLeftNumber
+		//set new place value in number[i]
+		number[i] = getdigit(sum, strlen(number) - i);
+	}
+	
 	return number;
+}
+
+//TEST METHOD DELETE LATER
+int getdigit(int number, int digit)
+{
+	return (number / ((int)pow(10, digit)) % 10);
 }
